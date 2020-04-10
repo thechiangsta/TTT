@@ -33,7 +33,6 @@ if __name__ == '__main__':
     innocents = [name for i, (name, phoneNum) in enumerate(recipients.items()) if roles[i] == 2]
 
     generalMsg = ("\r\n%s is the detective!" % detective[0])
-    traitorMsg = " Here are all the traitors: " + ', '.join(traitors)
 
     print('Detective:', detective)
     print('Traitors:', traitors)
