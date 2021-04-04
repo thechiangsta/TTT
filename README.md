@@ -16,4 +16,4 @@ For you (the user) and friends to be able to play [Trouble in Terrorist Town](ht
 Here are the instructions to use the TTT Roles Generator:
 1. Enter your email and password in the **recipients.txt** file in the designated fields labeled **email** and **password** respectively.
 2. Add recipients separated by newlines under where it says **ENTER RECIPIENTS HERE**. Format the recipients as: *phone number*@*sms gateway*, *name*. Ex. 1234567890@vtext.com, John
-3. Run the Python script with the command: ***python ttt.py***
+3. Run the Python script with the command: **python ttt.py**
