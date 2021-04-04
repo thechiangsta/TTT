@@ -15,7 +15,7 @@
 
 // ENTER EMAIL AND APP PASSWORD HERE
 email:""
-password:"" 
+password:""
 
 
 //  Recipient format: phonenumber@gatewaydomain, Name
