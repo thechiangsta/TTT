@@ -2,7 +2,7 @@
 ---
 
 ### Purpose
-For you (the user) and friends to be able to play [Trouble in Terrorist Town](https://www.troubleinterroristtown.com/) whether in person or in a video game. With this generator you will be able to use your Gmail account (haven't tried using other email services yet) to send the players' roles as SMS messages.
+For you (the user) and friends to be able to play [Trouble in Terrorist Town](https://www.troubleinterroristtown.com/) whether in person or in a video game. With this generator you will be able to use your Gmail account (no support for other emails as of now) to send the players' roles as SMS messages.
 
 ### Prerequisites
 1. Ensure you have Python installed. If you do not, you can do so [here](https://www.python.org/downloads/).
