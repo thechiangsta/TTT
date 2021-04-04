@@ -7,9 +7,9 @@ For you (the user) and friends to be able to play [Trouble in Terrorist Town](ht
 ### Prerequisites
 1. Ensure you have Python installed. If you do not, you can do so [here](https://www.python.org/downloads/).
 2. You'll need to create an app password for your Google account to use for sending the messages to other players.<br>
-  1. Navigate to your Google account security [settings](https://myaccount.google.com/intro/security) and under the **Signing in to Google** section, click **App passwords**.
-  2. Click the **Select app** dropdown and choose **Other**. You will be prompted to name the password.
-  3. Copy the password as you will not be able to retrieve it; and if lost, you will have to create a new password.<br>
+   1. Navigate to your Google account security [settings](https://myaccount.google.com/intro/security) and under the **Signing in to Google** section, click **App passwords**.
+   2. Click the **Select app** dropdown and choose **Other**. You will be prompted to name the password.
+   3. Copy the password as you will not be able to retrieve it; and if lost, you will have to create a new password.<br>
   ![Google App Passwords](images/apppasswords.png)<br>
 
 ### Usage
