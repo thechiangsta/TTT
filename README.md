@@ -4,7 +4,7 @@
 ### Purpose
 For you (the user) and friends to be able to play [Trouble in Terrorist Town](https://www.troubleinterroristtown.com/) whether in person or in a video game. With this generator you will be able to use your Gmail account (no support for other emails as of now) to send the players' roles as SMS messages.
 
-### Prerequisites
+### Setup
 1. Ensure you have Python installed. If you do not, you can do so [here](https://www.python.org/downloads/).
 2. You'll need to create an app password for your Google account to use for sending the messages to other players.<br>
    1. Navigate to your Google account security [settings](https://myaccount.google.com/intro/security) and under the **Signing in to Google** section, click **App passwords**.
