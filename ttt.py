@@ -1,7 +1,6 @@
 # Author: Clifton Chiang
 # Date: 04/03/2021
 
-# Import libraries
 import email.utils
 import re
 import os
@@ -11,6 +10,7 @@ import random
 import getpass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 
 if __name__ == '__main__':
     senderEmail = '' # Sender's email address 
