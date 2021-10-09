@@ -1,0 +1,13 @@
+
+{
+    "sender": {
+        "email": "asdf@gmail.com",
+        "password": "asdf"
+    },
+    "recipients": [
+        {
+            "phone": "1234567890@vtext.com", 
+            "name": "John"
+        }
+    ]
+}

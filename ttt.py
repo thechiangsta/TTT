@@ -2,89 +2,92 @@
 # Date: 04/03/2021
 
 import email.utils
+import json
 import re
-import os
-import math
 import smtplib
 import random
-import getpass
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 
 if __name__ == '__main__':
-    senderEmail = '' # Sender's email address 
-    password = '' # App password 
-    recipients = {}
-    # Read the recipients file and extract the email,
-    # password, and recipients
-    with open('recipients.txt', 'rt') as file:
-        for line in file:
-            if(line.startswith('email')):
-                senderEmail = re.search('\"(\S+@\S+)\"', line)[0]
-            elif(line.startswith('password')):
-                password = re.search('\"(.+?)\"', line)[0]
-            elif(not line.startswith('//') and not line == '\n'):
-                matches = re.search('^([0-9]+@[A-Za-z.]+),\W*(\S+)$', line)
-                recipients[matches[2].strip()] = matches[1].strip()
-    
+    with open('recipients.json', 'r') as json_file:
+        data = json.load(json_file)
+
+        # Validate data
+        if not data.get('sender'):
+            raise Exception("Missing sender")
+        sender_email = data.get('sender').get('email')
+        sender_password = data.get('sender').get('password')
+        recipients = data.get('recipients')
+        if not sender_email or not re.search('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}', sender_email):
+            raise Exception("Valid email required")
+        if not sender_password:
+            raise Exception("Password required")
+        if not recipients:
+            raise Exception("No recipients added")
         
     # The rules of TTT state that generally the number of
     # detectives, traitors, and innocents are percentages
     # of the total number of players.
     # https://trouble-in-terrorist-town.fandom.com/wiki/Detective#:~:text=The%20Detectives%20are%20the%20smallest,out%20who%20the%20Traitors%20are.
-    numRoles = len(recipients)
-    numDetectives = round(numRoles * 0.125)
-    numTraitors = round(numRoles * 0.25)
-    numInnocents = round(numRoles * 0.625)
+    num_roles = len(recipients)
+    num_detectives = round(num_roles * 0.125)
+    num_traitors = round(num_roles * 0.25)
+    num_innocents = num_roles - num_detectives - num_traitors
     
     # Fill the roles array with correct number of detectives, traitors, and innocents
-    # 0 - Detective
-    # 1 - Traitor
-    # 2 - Innocent
     roles = []
-    for i in range(numDetectives):
-        roles.append(0)
-    for i in range(numTraitors):
-        roles.append(1)
-    for i in range(numInnocents):
-        roles.append(2)    
+    for i in range(num_detectives):
+        roles.append('detective')
+    for i in range(num_traitors):
+        roles.append('traitor')
+    for i in range(num_innocents):
+        roles.append('innocent')    
 
-    # Ensure the roles are randomized for the players
+    # Shuffle the recipients so roles are randomized
+    random.shuffle(recipients)
     random.shuffle(roles)
 
+    # Assign the roles to
+    for role, recip in zip(roles, recipients):
+        recip.update({
+            'role': role
+        })
+    
     # Determine who is what role
-    detective = [name for i, (name, phoneNum) in enumerate(recipients.items()) if roles[i] == 0]
-    traitors = [name for i, (name, phoneNum) in enumerate(recipients.items()) if roles[i] == 1]
-    innocents = [name for i, (name, phoneNum) in enumerate(recipients.items()) if roles[i] == 2]
-  
+    detective = next(r for r in recipients if r.get('role') == 'detective')
+    traitors = [r for r in recipients if r.get('role') == 'traitor']
+    innocents = [r for r in recipients if r.get('role') == 'innocent']
+
     # The message that will be sent to everyone
-    generalMsg = ('\r\n%s is the detective!' % detective[0])
+    generalMsg = f"{detective.get('name')} is the detective!"
 
     # Start tls session
-    s = smtplib.SMTP('smtp.gmail.com', 587)
+    smtpServer = ''
+    emailProvider = re.search('@([A-Za-z]+).com', sender_email).group(1)
+    if(emailProvider == 'yahoo'):
+        smtpServer = 'smtp.mail.yahoo.com'
+    elif(emailProvider == 'gmail'):
+        smtpServer = 'smtp.gmail.com'
+    elif(emailProvider == 'aol'):
+        smtpServer = 'smtp.aol.com'
+
+    s = smtplib.SMTP(smtpServer, 587)
     s.starttls()
-    s.login(senderEmail, password)
+    s.login(sender_email, sender_password)
 
     # Detective
-    recipient = recipients[detective[0]]
-    body = '\r\nYou are the detective!'
-    s.sendmail(senderEmail, recipient, body)
+    s.sendmail(email, detective.get('phone'), '\r\nYou are the detective!')
 
     # Traitors
-    for traitor in traitors:
-        recipient = recipients[traitor]
-        body = generalMsg + '\r\nYou are a traitor! Here are your fellow traitors:\r\n' + \
-            ', '.join([v for i, v in enumerate(traitors) if v != traitor])
-        s.sendmail(senderEmail, recipient, body)
+    for t in traitors:
+        s.sendmail(email, t.get('phone'), 
+            f"{generalMsg}\r\nYou are a traitor! Here are your fellow traitor(s): {', '.join([tr.get('name') for tr in traitors if tr.get('phone') != t.get('phone')])}"
+        )
         
 
     # Innocents
-    for innocent in innocents:
-        recipient = recipients[innocent]
-        body = generalMsg + '\r\nYou are an innocent!'
-        s.sendmail(senderEmail, recipient, body)
+    for i in innocents:
+        s.sendmail(email, i.get('phone'), f"{generalMsg}\r\nYou are an innocent!")
 
     # End session
     s.quit()
-
