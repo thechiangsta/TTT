@@ -1,7 +1,6 @@
 # Author: Clifton Chiang
 # Date: 04/03/2021
 
-import email.utils
 import json
 import re
 import smtplib
@@ -47,7 +46,7 @@ if __name__ == '__main__':
     random.shuffle(recipients)
     random.shuffle(roles)
 
-    # Assign the roles to
+    # Assign the roles to recipients
     for role, recip in zip(roles, recipients):
         recip.update({
             'role': role
@@ -64,11 +63,11 @@ if __name__ == '__main__':
     # Start tls session
     smtpServer = ''
     emailProvider = re.search('@([A-Za-z]+).com', sender_email).group(1)
-    if(emailProvider == 'yahoo'):
+    if emailProvider == 'yahoo':
         smtpServer = 'smtp.mail.yahoo.com'
-    elif(emailProvider == 'gmail'):
+    elif emailProvider == 'gmail':
         smtpServer = 'smtp.gmail.com'
-    elif(emailProvider == 'aol'):
+    elif emailProvider == 'aol':
         smtpServer = 'smtp.aol.com'
 
     s = smtplib.SMTP(smtpServer, 587)
@@ -83,7 +82,6 @@ if __name__ == '__main__':
         s.sendmail(sender_email, t.get('phone'), 
             f"{generalMsg}\r\nYou are a traitor! Here are your fellow traitor(s): {', '.join([tr.get('name') for tr in traitors if tr.get('phone') != t.get('phone')])}"
         )
-        
 
     # Innocents
     for i in innocents:
