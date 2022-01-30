@@ -75,12 +75,13 @@ if __name__ == '__main__':
     s.login(sender_email, sender_password)
 
     # Detective
-    s.sendmail(sender_email, detective.get('phone'), '\r\nYou are the detective!')
+    s.sendmail(sender_email, detective.get('phone'), "\r\nYou are the detective!")
 
     # Traitors
     for t in traitors:
         s.sendmail(sender_email, t.get('phone'), 
-            f"{generalMsg}\r\nYou are a traitor! Here are your fellow traitor(s): {', '.join([tr.get('name') for tr in traitors if tr.get('phone') != t.get('phone')])}"
+            f"""{generalMsg}\r\nYou are a traitor! Here are your fellow traitor(s): 
+            {', '.join([tr.get('name') for tr in traitors if tr.get('phone') != t.get('phone')])}"""
         )
 
     # Innocents
